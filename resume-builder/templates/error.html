@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <style>
+    body {
+      background: linear-gradient(120deg, #fda085 0%, #f6d365 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .error-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(253,160,133,0.15);
+      padding: 40px 32px;
+      text-align: center;
+      animation: shake 0.7s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-1px); }
+      20%, 80% { transform: translateX(2px); }
+      30%, 50%, 70% { transform: translateX(-4px); }
+      40%, 60% { transform: translateX(4px); }
+    }
+    h1 {
+      color: #fda085;
+      margin-bottom: 16px;
+    }
+    p {
+      color: #333;
+      font-size: 1.1rem;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: linear-gradient(90deg, #fda085 0%, #f6d365 100%);
+      color: #fff;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    a:hover {
+      background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-box">
+    <h1>Oops!</h1>
+    <p>{{ message }}</p>
+    <a href="/">Back to Home</a>
+  </div>
+</body>
+</html> 

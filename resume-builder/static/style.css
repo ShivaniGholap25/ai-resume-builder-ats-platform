@@ -1,0 +1,84 @@
+h1.glow {
+  font-size: 2.5rem;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 20px #86a8e7, 0 0 30px #86a8e7;
+  margin-bottom: 20px;
+}
+
+.form-section {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px 30px 20px 30px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(253,160,133,0.15);
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 0.3s;
+}
+
+.form-section:hover {
+  box-shadow: 0 16px 48px rgba(253,160,133,0.25);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: 1.5px solid #fda085;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: box-shadow 0.3s, border-color 0.3s;
+  background: #fff;
+}
+
+input:focus, textarea:focus {
+  box-shadow: 0 0 8px #fda085;
+  border-color: #fda085;
+  outline: none;
+}
+
+.animated-btn {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(253,160,133,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.animated-btn:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 32px rgba(253,160,133,0.25);
+}
+
+@media (max-width: 600px) {
+  .form-section {
+    padding: 30px 20px;
+  }
+
+  h1.glow {
+    font-size: 2rem;
+  }
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  animation: bgMove 10s ease-in-out infinite alternate;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}

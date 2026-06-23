@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Resume</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body, .name, .contact, .sidebar-section-title, .skills-list, .main, .section-title, .section-content, .timeline, .timeline-entry, .download-btn {
+      font-family: 'Segoe UI', Arial, sans-serif !important;
+    }
+    body {
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #222;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    .bg-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.85);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .resume-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(30,64,175,0.07);
+      border-radius: 14px;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar {
+      background: linear-gradient(160deg, #1a73e8 0%, #67c6ff 100%);
+      color: #fff;
+      width: 260px;
+      padding: 40px 28px 40px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+    }
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 8px;
+      background: #0b57d0;
+      border-radius: 0 8px 8px 0;
+    }
+    .name {
+      font-size: 2.1rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      z-index: 1;
+    }
+    .contact {
+      font-size: 1.02rem;
+      margin-bottom: 28px;
+      z-index: 1;
+      word-break: break-all;
+    }
+    .sidebar-section-title {
+      font-size: 1.08rem;
+      font-weight: bold;
+      margin: 18px 0 8px 0;
+      letter-spacing: 0.5px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sidebar-section-title::before {
+      content: '\2605';
+      font-size: 1rem;
+      color: #fff;
+      opacity: 0.7;
+    }
+    .skills-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      z-index: 1;
+    }
+    .skills-list li {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      border-radius: 8px;
+      padding: 5px 13px;
+      font-size: 0.98rem;
+      display: inline-block;
+    }
+    .main {
+      flex: 1;
+      padding: 40px 44px 40px 44px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: 1.13rem;
+      font-weight: bold;
+      color: #1a73e8;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title.aboutme::before { content: '\1F464'; }
+    .section-title.education::before { content: '\1F393'; }
+    .section-title.projects::before { content: '\1F4C8'; }
+    .section-content {
+      font-size: 1.04rem;
+      color: #222;
+      margin-top: 2px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .timeline {
+      border-left: 3px solid #e0e0e0;
+      margin-left: 10px;
+      padding-left: 18px;
+    }
+    .timeline-entry {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .timeline-entry:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-entry::before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      background: #1a73e8;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #e0e0e0;
+    }
+    .download-btn {
+      display: block;
+      margin: 32px auto 0 auto;
+      background: linear-gradient(90deg, #1a73e8 0%, #67c6ff 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 12px 32px;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(30,64,175,0.10);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .download-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 32px rgba(30,64,175,0.15);
+    }
+    @media (max-width: 900px) {
+      .resume-container { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; align-items: flex-start; }
+      .main { padding: 32px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-overlay"></div>
+  <div class="resume-container" id="resume-content">
+    <div class="sidebar">
+      <div class="name">{{ data.name }}</div>
+      <div class="contact">Email: {{ data.email }}</div>
+      {% if data.skills.strip() %}
+      <div class="sidebar-section-title">Skills</div>
+      <ul class="skills-list">
+        {% for skill in data.skills.split(',') if skill.strip() %}
+          <li>{{ skill.strip() }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <div class="main">
+      {% if data.about_me.strip() %}
+      <div class="section">
+        <div class="section-title aboutme">About Me</div>
+        <div class="section-content">{{ data.about_me }}</div>
+      </div>
+      {% endif %}
+      {% if data.education.strip() %}
+      <div class="section">
+        <div class="section-title education">Education</div>
+        <div class="timeline">
+          {% for edu in data.education.split('\n') if edu.strip() %}
+            <div class="timeline-entry">{{ edu.strip() }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% if data.projects.strip() %}
+      <div class="section">
+        <div class="section-title projects">Projects</div>
+        <div class="timeline">
+          {% for proj in data.projects.split('\n') if proj.strip() %}
+            <div class="timeline-entry">{{ proj.strip() }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% if preview %}
+      <button id="download-pdf" class="download-btn" type="button">Download as PDF</button>
+      {% endif %}
+    </div>
+  </div>
+  <script>
+    document.getElementById('download-pdf')?.addEventListener('click', function() {
+      var element = document.getElementById('resume-content');
+      // Hide the button before generating the PDF
+      this.style.display = 'none';
+      html2pdf().from(element).save('resume.pdf');
+    });
+  </script>
+</body>
+</html>
+

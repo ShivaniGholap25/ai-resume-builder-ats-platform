@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Builder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #89f7fe, #66a6ff, #a18cd1, #fbc2eb);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 20px;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      color: white;
+      text-align: center;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #fff, 0 0 30px #66a6ff;
+    }
+
+    .hero p {
+      color: #f0f8ff;
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 8px #66a6ff;
+      transform: scale(1.02);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      background: linear-gradient(90deg, #66a6ff, #89f7fe);
+      color: white;
+      font-size: 1.1rem;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(102, 166, 255, 0.3);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(102, 166, 255, 0.4);
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>AI Resume Builder</h1>
+      <p>Build a beautiful resume in seconds. Enter your details and get a downloadable PDF instantly!</p>
+    </div>
+    <section class="form-section">
+      <form method="POST" action="/generate">
+        <input type="text" name="name" placeholder="Your Full Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="summary" placeholder="Career Summary"></textarea>
+        <input type="text" name="skills" placeholder="Skills (comma separated)" required>
+        <textarea name="education" placeholder="Education Details"></textarea>
+        <textarea name="experience" placeholder="Work Experience"></textarea>
+        <button type="submit">Generate Resume</button>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "ats-analyzer-backend",
+  "version": "1.0.0",
+  "description": "ATS Resume Analyzer Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "compromise": "^14.14.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mammoth": "^1.8.0",
+    "mongoose": "^8.4.1",
+    "multer": "^1.4.5-lts.1",
+    "natural": "^6.12.0",
+    "openai": "^6.38.0",
+    "pdf-parse": "^1.1.1",
+    "stopword": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
