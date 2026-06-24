@@ -172,7 +172,11 @@ const App = () => {
           {/* AI Optimizer */}
           {activeTab === 'ai-optimizer' && (
             <motion.div key="ai-optimizer" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <AIOptimizerPage />
+              <AIOptimizerPage
+                uploadedFile={uploadedFile}
+                extractedResumeText={extractedResumeText}
+                result={result}
+              />
             </motion.div>
           )}
 
