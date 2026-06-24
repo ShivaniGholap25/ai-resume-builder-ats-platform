@@ -69,10 +69,16 @@ router.post('/', upload.single('resume'), async (req, res) => {
     const result   = analyzeResume(resumeText, jobDescription);
     const fileType = mimetype === 'application/pdf' ? 'pdf' : 'docx';
 
-    // Persist to MongoDB
-    const saved = await saveAnalysis(originalname, fileType, resumeText, jobDescription, result);
+    // Persist to MongoDB (best-effort — don't block response)
+    let savedId = null;
+    try {
+      const saved = await saveAnalysis(originalname, fileType, resumeText, jobDescription, result);
+      savedId = saved._id;
+    } catch (dbErr) {
+      console.warn('[/api/analyze] MongoDB save skipped:', dbErr.message);
+    }
 
-    res.status(200).json({ id: saved._id, fileName: originalname, ...result });
+    res.status(200).json({ id: savedId, fileName: originalname, ...result });
 
   } catch (err) {
     console.error('[/api/analyze] error:', err.message);
