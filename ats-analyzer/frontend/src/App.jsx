@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { analyzeResume }       from './api/analyzeApi';
+import { uploadResume }        from './api/resumeApi';
 import DashboardPage           from './components/dashboard/DashboardPage';
 import UploadForm              from './components/dashboard/UploadForm';
 import ResultsDashboard        from './components/dashboard/ResultsDashboard';
@@ -35,6 +36,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result,    setResult]    = useState(null);
   const [fileName,  setFileName]  = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [extractedResumeText, setExtractedResumeText] = useState('');
 
   const navigate = (tabId) => {
     setActiveTab(tabId);
@@ -44,10 +47,18 @@ const App = () => {
   const handleAnalyze = async (file, jobDescription) => {
     setIsLoading(true);
     setResult(null);
+    setUploadedFile(file);
     try {
       const data = await analyzeResume(file, jobDescription);
       setResult(data);
       setFileName(file.name);
+
+      // Extract raw text for JD matching
+      const extract = await uploadResume(file);
+      if (extract && extract.text) {
+        setExtractedResumeText(extract.text);
+      }
+
       toast.success('Analysis complete!');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Analysis failed. Please try again.');
@@ -56,7 +67,12 @@ const App = () => {
     }
   };
 
-  const handleReset = () => { setResult(null); setFileName(''); };
+  const handleReset = () => {
+    setResult(null);
+    setFileName('');
+    setUploadedFile(null);
+    setExtractedResumeText('');
+  };
 
   // ── Resume Builder gets its own full-bleed layout ────────
   if (activeTab === 'builder') {
@@ -146,7 +162,10 @@ const App = () => {
           {/* Job Match */}
           {activeTab === 'jd-match' && (
             <motion.div key="jd-match" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <JobMatchPage />
+              <JobMatchPage
+                uploadedFile={uploadedFile}
+                extractedResumeText={extractedResumeText}
+              />
             </motion.div>
           )}
 

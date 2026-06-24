@@ -29,10 +29,11 @@ Responsibilities:
 • Write clean, testable, and well-documented code
 • Mentor junior developers`;
 
-export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResume }) {
+export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResume, uploadedFile, extractedResumeText }) {
   const [jdText, setJdText]         = useState('');
   const [resumeText, setResumeText] = useState('');
-  const [mode, setMode]             = useState('analyze'); // 'analyze' | 'compare'
+  const [mode, setMode]             = useState(uploadedFile ? 'compare' : 'analyze');
+  const [useConnected, setUseConnected] = useState(!!uploadedFile);
   const [charCount, setCharCount]   = useState(0);
 
   const handleJDChange = (e) => {
@@ -44,8 +45,11 @@ export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResum
     e.preventDefault();
     if (!jdText.trim() || jdText.trim().length < 50) return;
 
-    if (mode === 'compare' && resumeText.trim().length > 50) {
-      onCompare(jdText, resumeText);
+    if (mode === 'compare') {
+      const activeResumeText = useConnected ? extractedResumeText : resumeText;
+      if (activeResumeText.trim().length > 50) {
+        onCompare(jdText, activeResumeText);
+      }
     } else {
       onAnalyze(jdText);
     }
@@ -57,7 +61,8 @@ export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResum
   };
 
   const isValid = jdText.trim().length >= 50;
-  const canCompare = mode === 'compare' && resumeText.trim().length >= 50;
+  const activeResumeText = useConnected ? extractedResumeText : resumeText;
+  const canCompare = mode === 'compare' && activeResumeText.trim().length >= 50;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -81,6 +86,35 @@ export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResum
           </button>
         ))}
       </div>
+
+      {/* Connected Resume Info */}
+      {mode === 'compare' && uploadedFile && (
+        <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/60 rounded-xl flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">📄</span>
+            <div>
+              <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">
+                Connected Resume: {uploadedFile.name}
+              </p>
+              <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                Parsed from ATS dashboard ({extractedResumeText.split(/\s+/).length} words)
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="useConnected"
+              checked={useConnected}
+              onChange={(e) => setUseConnected(e.target.checked)}
+              className="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500"
+            />
+            <label htmlFor="useConnected" className="text-xs font-medium text-emerald-700 dark:text-emerald-300 cursor-pointer">
+              Use for Match
+            </label>
+          </div>
+        </div>
+      )}
 
       {/* JD textarea */}
       <div>
@@ -119,7 +153,7 @@ export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResum
       </div>
 
       {/* Resume text (compare mode) */}
-      {mode === 'compare' && (
+      {mode === 'compare' && !useConnected && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
@@ -156,11 +190,11 @@ export default function JDInputPanel({ onAnalyze, onCompare, isLoading, hasResum
       {/* Submit */}
       <motion.button
         type="submit"
-        disabled={isLoading || !isValid || (mode === 'compare' && !canCompare && resumeText.length > 0)}
-        whileHover={!isLoading && isValid ? { scale: 1.01 } : {}}
-        whileTap={!isLoading && isValid ? { scale: 0.99 } : {}}
+        disabled={isLoading || !isValid || (mode === 'compare' && !canCompare)}
+        whileHover={!isLoading && isValid && (!mode === 'compare' || canCompare) ? { scale: 1.01 } : {}}
+        whileTap={!isLoading && isValid && (!mode === 'compare' || canCompare) ? { scale: 0.99 } : {}}
         className={`w-full py-3.5 rounded-xl font-semibold text-white text-sm transition-all
-          ${isLoading || !isValid
+          ${isLoading || !isValid || (mode === 'compare' && !canCompare)
             ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed text-slate-500'
             : mode === 'compare'
               ? 'bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 shadow-lg shadow-violet-200 dark:shadow-violet-900/30'
